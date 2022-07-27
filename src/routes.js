@@ -1,60 +1,36 @@
 const express = require("express")
 const router = express.Router()
 
-const CategoriesModel = require('./models/categories');
+// Categories
+const CategoryController = require('./controllers/CategoryController')
+router.get('/categories', CategoryController.search)
+router.get('/categories/:id', CategoryController.read)
+router.post('/categories', CategoryController.create)
+router.put('/categories/:id', CategoryController.update)
+router.delete('/categories/:id', CategoryController.delete)
 
-router.get('/categories', async (req, res) => {
-  try {
-    const data = await CategoriesModel.find();
-    res.json(data)
-  } catch (error){
-    res.status(500).json({ message: error.message })
-  }
-})
+// Sizes
+const SizesController = require('./controllers/SizesController')
+router.get('/sizes', SizesController.search)
+router.get('/sizes/:id', SizesController.read)
+router.post('/sizes', SizesController.create)
+router.put('/sizes/:id', SizesController.update)
+router.delete('/sizes/:id', SizesController.delete)
 
-router.get('/categories/:id', async (req, res) => {
-  try {
-    const data = await CategoriesModel.findById(req.params.id);
-    res.json(data)
-  } catch(error) {
-    res.status(500).json({ message: error.message })
-  }
-})
+// Colors
+const ColorsController = require('./controllers/ColorsController')
+router.get('/colors', ColorsController.search)
+router.get('/colors/:id', ColorsController.read)
+router.post('/colors', ColorsController.create)
+router.put('/colors/:id', ColorsController.update)
+router.delete('/colors/:id', ColorsController.delete)
 
-router.post('/categories', async (req, res) => {
-  const model = new CategoriesModel({ name: req.body.name })
-
-  try {
-    await model.save();
-    res.status(200).json(model)
-  } catch (error) {
-    res.status(400).json({ message: error.message })
-  }
-})
-
-router.put('/categories/:id', async (req, res) => {
-  try {
-    const record = await CategoriesModel.findOne({ _id: req.params.id })
-
-    if (req.body.name) {
-      record.name = req.body.name
-    }
-
-    await record.save()
-    res.send(record)
-  } catch (error) {
-    res.status(400).json({ message: error.message })
-  }
-})
-
-router.delete('/categories/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    await CategoriesModel.findByIdAndDelete(id)
-    res.status(204).send()
-  } catch (error) {
-    res.status(400).json({ message: error.message })
-  }
-})
+// Collections
+const Collections = require('./controllers/CollectionsController')
+router.get('/collections', Collections.search)
+router.get('/collections/:id', Collections.read)
+router.post('/collections', Collections.create)
+router.put('/collections/:id', Collections.update)
+router.delete('/collections/:id', Collections.delete)
 
 module.exports = router
